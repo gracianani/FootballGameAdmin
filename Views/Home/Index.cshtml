@@ -1,0 +1,80 @@
+﻿@model IEnumerable<BrazilFootballGameDomainModel.Values.Rules.ILuckyDrawRule>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row">
+    <h2 class="sub-header"> 抽奖限额设置 </h2>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+        @foreach (var item in Model) {
+            <tr class="view">
+                <td> @item.LuckyDrawRuleDescription</td>
+                <td> @item.奖品 </td>
+                <td> @item.有效时间间隔 </td>
+                <td> @Html.Label(@item.限额.ToString(), new { @class="viewOnly lbQueryPerdict"})  @Html.TextBox("queryPerdict", @item.限额, new { @class = "editOnly" })</td>
+                <td>
+                    @Html.ActionLink("编辑", "Edit", new { }, new { dataid = @item.PrizeLimitId, @class = "viewOnly edit btn", href = "javascript:void(0)" }) 
+                    @Html.ActionLink("确定", "Update", new { }, new { dataid = @item.PrizeLimitId, @class = "editOnly update btn", href = "javascript:void(0)" }) 
+                    @Html.ActionLink("取消", "CancelUpdate", new { }, new { dataid = @item.PrizeLimitId, @class = "editOnly cancelUpdate btn", href = "javascript:void(0)" })
+                    @Html.ActionLink("删除", "Delete", new { }, new { dataid = @item.PrizeLimitId, @class = "viewOnly delete btn", href = "javascript:void(0)" })
+                </td>
+            </tr>
+        }
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    @Html.ActionLink("查看中奖名单", "PrizeRedeem", new { fromDate = "2014-3-1", toDate = @DateTime.Today })
+</div>
+<script type="text/javascript">
+    function enterEditMode() {
+    }
+
+    function enterViewMode() {
+    }
+
+    $(function () {
+        $(".edit").click(function () {
+            var $tr = $(this).parents("tr");
+            if ($tr.hasClass("view")) {
+                $tr.removeClass("view").addClass("edit");
+            }
+            else {
+                $tr.removeClass("edit").addClass("view");
+            }
+        });
+
+        $(".update").click(function () {
+            var $self = $(this);
+            $.ajax({
+                url: "/Home/Update",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ prizeLimitId: parseInt($self.attr("dataid")), queryPerdict: parseInt($self.parents("tr").find("input[name=queryPerdict]").val()) }),
+                success: function (d) {
+                    var result = JSON.parse(d);
+                    if (result.result == true) {
+                        $self.parents("tr").find(".lbQueryPerdict").html(result.queryPerdict);
+                        $self.parents("tr").removeClass("edit").addClass("view");
+                    }
+                }
+            });
+        });
+
+        $(".cancelUpdate").click(function () {
+            var $tr = $(this).parents("tr");
+            if ($tr.hasClass("view")) {
+                $tr.removeClass("view").addClass("edit");
+            }
+            else {
+                $tr.removeClass("edit").addClass("view");
+            }
+        });
+    });
+</script>

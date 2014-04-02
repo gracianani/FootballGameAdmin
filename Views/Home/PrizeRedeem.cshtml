@@ -1,0 +1,41 @@
+﻿@model FootballGameAdmin.ViewModels.PrizeRedeemViewModel
+
+@{
+    ViewBag.Title = "PrizeRedeem";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    
+    <h2>中奖结果</h2>
+
+    <div class="row">
+    @using (Html.BeginForm("PrizeRedeem", "Home", FormMethod.Get))
+    {
+        @Html.TextBox("fromDate", @Model.FromDate)
+
+        @Html.TextBox("toDate", @Model.ToDate)
+
+        <input type="submit" value="搜索" class="btn  btn-primary" style="vertical-align: top;"/>
+    }
+    </div>
+
+    <div class="row">4
+        <table class="table">
+        @foreach (var prizeRedeem in @Model.PrizeRedeems)
+        {
+            <tr>
+                <td>
+                    @prizeRedeem.prizeName
+                </td>
+                <td>
+                    @prizeRedeem.createdAt
+                </td>
+                <td>
+                    @prizeRedeem.shipTo
+                </td>
+            </tr>
+        }
+        </table>
+    </div>
+</div>

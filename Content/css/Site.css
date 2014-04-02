@@ -1,0 +1,12 @@
+﻿body {
+}
+
+tr.view .editOnly
+{
+    display:none;
+}
+
+tr.edit .viewOnly 
+{
+    display:none;
+}
